@@ -31,7 +31,7 @@ jobs:
 
       - name: login dock
         run: |
-          docker login --username=${{ secret.ssst }} --password-stdin=${{ secret.tsss }}
+          docker login --username=${{ secret.SSST }} --password-stdin=${{ secret.TSSS }}
 
       - name: pull dock
         run: |
