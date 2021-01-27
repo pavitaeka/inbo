@@ -8,12 +8,11 @@ on:
    
 env:
   # Change these values if you have forked it for your own works
-  GitHubMail: "dinovelica@yahoo.com"
   GitHubName: "pavitaeka" 
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
 
     steps:
       - name: Checkout
@@ -21,7 +20,7 @@ jobs:
 
       - name: Set Git Configs & Secrets
         run: |
-          git config --global user.email ${GitHubMail}
+          git config --global user.email ${{ secrets.HELL }}
           git config --global user.name ${GitHubName}
           git config --global credential.helper store
           echo "https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
