@@ -27,11 +27,11 @@ jobs:
           echo "https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
 
       # Cleanup The Actions Workspace Using Custom Composite Run Actions
-      - uses: pavitaeka/slimhub_actions@main
+      #- uses: pavitaeka/slimhub_actions@main
 
       - name: login dock
         run: |
-          docker login --username=${{ secrets.SSST }} --password-stdin=${{ secrets.TSSS }}
+          docker login --username=${{ secrets.SSST }} --password=${{ secrets.TSSS }}
 
       - name: pull dock
         run: |
