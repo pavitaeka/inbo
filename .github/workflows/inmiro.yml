@@ -1,0 +1,58 @@
+name: inmiro
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore: 'README.md'
+  workflow_dispatch:
+   
+env:
+  # Change these values if you have forked it for your own works
+  GitHubMail: "dinovelica@yahoo.com"
+  GitHubName: "pavitaeka" 
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Set Git Configs & Secrets
+        run: |
+          git config --global user.email ${GitHubMail}
+          git config --global user.name ${GitHubName}
+          git config --global credential.helper store
+          echo "https://${GitHubName}:${{ secrets.GH_TOKEN }}@github.com" > ~/.git-credentials
+
+      # Cleanup The Actions Workspace Using Custom Composite Run Actions
+      - uses: pavitaeka/slimhub_actions@main
+
+      - name: login dock
+        run: |
+          docker login --username=${{ secret.ssst }} --password-stdin=${{ secret.tsss }}
+
+      - name: pull dock
+        run: |
+          docker container prune --force || true
+          docker pull qwertymini/bot:inibobot
+          docker image ls
+
+      - name: running Docker
+        timeout-minutes: 340
+        continue-on-error: true
+        run: |
+                docker run --privileged --rm -i qwertymini/bot:inibobot
+
+      - name: Loop Workflow
+        continue-on-error: true
+        run: |
+          # ${GITHUB_REPOSITORY} is the repo slug which runs this script
+          git clone https://${{ secrets.GH_TOKEN }}@github.com/${GITHUB_REPOSITORY} loop
+          cd loop || exit 1
+          echo $(( RANDOM - ( RANDOM % RANDOM ) )) > looper.txt
+          git add looper.txt
+          git commit -m "Workflow : Loop at $(date -u +%D-%T%P)"
+          git push -q https://${{ secrets.GH_TOKEN }}@github.com/${GITHUB_REPOSITORY} HEAD:main
+
